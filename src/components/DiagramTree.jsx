@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as RJD from 'react-js-diagrams';
 import './DiagramTree.scss';
 
-const DiagramTree = () => {
+const DiagramTree = ({ data }) => {
     const engine = new RJD.DiagramEngine();
     engine.registerNodeFactory(new RJD.DefaultNodeFactory());
     engine.registerLinkFactory(new RJD.DefaultLinkFactory());
@@ -50,36 +50,55 @@ const DiagramTree = () => {
         testSerialization();
     }, []);
 
-    // Create first node and port
-    const node1 = createNode({
-        name: 'Node 1',
-        color: 'rgb(0, 192, 255)',
-        x: 100,
-        y: 100
-    });
-    const port1 = createPort(node1, {
-        isInput: false,
-        id: 'out-1',
-        name: 'Out'
-    });
+    console.log('DATA', data)
+
+    data.forEach(item => {
+        const node = createNode({
+            name: item.name,
+            color: item.color,
+            x: item.x,
+            y: item.y
+        });
+        const port = createPort(node, {
+            isInput: item.port.isInput,
+            id: item.port.id,
+            name: item.port.name
+        })
+        console.log('NODE', node, port)
+        model.addNode(node);
+        // model.addLink(linkNodes(port))
+    })
+
+    // // Create first node and port
+    // const node1 = createNode({
+    //     name: 'Node 1',
+    //     color: 'rgb(0, 192, 255)',
+    //     x: 100,
+    //     y: 100
+    // });
+    // const port1 = createPort(node1, {
+    //     isInput: false,
+    //     id: 'out-1',
+    //     name: 'Out'
+    // });
   
-    // Create second node and port
-    const node2 = createNode({
-        name: 'Node 2',
-        color: 'rgb(192, 255, 0)',
-        x: 400,
-        y: 100
-    });
-    const port2 = createPort(node2, {
-        isInput: true,
-        id: 'in-1',
-        name: 'In'
-    });
+    // // Create second node and port
+    // const node2 = createNode({
+    //     name: 'Node 2',
+    //     color: 'rgb(192, 255, 0)',
+    //     x: 400,
+    //     y: 100
+    // });
+    // const port2 = createPort(node2, {
+    //     isInput: true,
+    //     id: 'in-1',
+    //     name: 'In'
+    // });
   
-    // Add the nodes and link to the model
-    model.addNode(node1);
-    model.addNode(node2);
-    model.addLink(linkNodes(port1, port2));
+    // // Add the nodes and link to the model
+    // model.addNode(node1);
+    // model.addNode(node2);
+    // model.addLink(linkNodes(port1, port2));
 
     // Load the model into the diagram engine
     engine.setDiagramModel(model);
